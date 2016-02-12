@@ -136,22 +136,4 @@ class StorageDb implements StorageInterface {
 		$this->DB->delete_records('connections_sockets_requests_out', ['id' => $id]);
 		return true;
 	}
-
-	/**
-	 * Extract the unique ID from a full local_endpoint URL.
-	 *
-	 * @param string $url A full local_endpoint URL.
-	 * @return string A local_endpoint ID.
-	 */
-	protected function endpointidfromurl($url) {
-		$pluginmanager = new \hydra\plugins\PluginManager($this->DB);
-		if ($pluginmanager->is_installed('socket', 'pubsubhubbub')) {
-			$pushclass = $pluginmanager->get_classname('socket', 'pubsubhubbub');
-			$pushclass = new $pushclass($this->DB);
-			$pushurl = $pushclass->plugin_url('/');
-			return rtrim(mb_substr($url, mb_strlen($pushurl), '/'));
-		} else {
-			throw new Exception('pubsubhubbub socket not found', Exception::ERR_INTERNAL_ERROR);
-		}
-	}
 }
